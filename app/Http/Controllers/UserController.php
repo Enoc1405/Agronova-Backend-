@@ -76,4 +76,30 @@ class UserController extends Controller
         // Si la autenticación falla
         return response()->json(['message' => 'Credenciales no válidas'], 401);
     }
+
+    // Método para asignar un rol a un usuario
+    public function assignRole(Request $request, $id)
+    {
+        $request->validate([
+            'role' => 'required|string|exists:roles,name', // Asegúrate de que el rol existe
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->assignRole($request->role); // Asignar el rol
+
+        return response()->json(['message' => 'Rol asignado correctamente.']);
+    }
+
+    // Método para mostrar los roles de un usuario
+    public function showRoles($id)
+    {
+        $user = User::findOrFail($id);
+        $roles = $user->roles; // Obtener los roles del usuario
+
+        return response()->json([
+            'user_id' => $user->id,
+            'roles' => $roles,
+        ]);
+    }
+
 }
