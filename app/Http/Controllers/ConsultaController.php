@@ -26,20 +26,19 @@ class ConsultaController extends Controller
     {
         try {
             $request->validate([
-                'user_id' => 'required|exists:users,id',  // Cambiado aquí
+                'user_id' => 'required|exists:users,id',  // Valida que el usuario exista
                 'consulta_texto' => 'required|string',
-                'respuesta_texto' => 'nullable|string',
                 'fecha' => 'nullable|date',
             ], [
-                'user_id.required' => 'El campo usuario es obligatorio.',  // Cambiado aquí
-                'user_id.exists' => 'El usuario no existe en el sistema.',  // Cambiado aquí
+                'user_id.required' => 'El campo usuario es obligatorio.',
+                'user_id.exists' => 'El usuario no existe en el sistema.',
                 'consulta_texto.required' => 'El texto de la consulta es obligatorio.',
                 'fecha.date' => 'La fecha debe tener un formato válido (YYYY-MM-DD).',
             ]);
 
-            // Crear la consulta con solo los campos permitidos
+            // Crear la consulta sin el campo respuesta_texto
             $consulta = Consulta::create($request->only([
-                'user_id', 'consulta_texto', 'respuesta_texto', 'fecha'  // Cambiado aquí
+                'user_id', 'consulta_texto', 'fecha'  // Solo los campos relevantes
             ]));
 
             return response()->json($consulta, 201);
@@ -55,20 +54,19 @@ class ConsultaController extends Controller
             $consulta = Consulta::findOrFail($id);
 
             $request->validate([
-                'user_id' => 'required|exists:users,id',  // Cambiado aquí
+                'user_id' => 'required|exists:users,id',  // Valida que el usuario exista
                 'consulta_texto' => 'required|string',
-                'respuesta_texto' => 'nullable|string',
                 'fecha' => 'nullable|date',
             ], [
-                'user_id.required' => 'El campo usuario es obligatorio.',  // Cambiado aquí
-                'user_id.exists' => 'El usuario no existe en el sistema.',  // Cambiado aquí
+                'user_id.required' => 'El campo usuario es obligatorio.',
+                'user_id.exists' => 'El usuario no existe en el sistema.',
                 'consulta_texto.required' => 'El texto de la consulta es obligatorio.',
                 'fecha.date' => 'La fecha debe tener un formato válido (YYYY-MM-DD).',
             ]);
 
-            // Actualizar la consulta con solo los campos permitidos
+            // Actualizar la consulta sin el campo respuesta_texto
             $consulta->update($request->only([
-                'user_id', 'consulta_texto', 'respuesta_texto', 'fecha'  // Cambiado aquí
+                'user_id', 'consulta_texto', 'fecha'  // Solo los campos relevantes
             ]));
 
             return response()->json($consulta);

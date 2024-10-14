@@ -12,8 +12,7 @@ class CreateConsultasTable extends Migration
         Schema::create('consultas', function (Blueprint $table) {
             $table->id();  // Clave primaria auto-incrementada
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');  // Clave foránea que referencia la tabla 'users'
-            $table->text('consulta_texto');
-            $table->text('respuesta_texto')->nullable();  // La respuesta es opcional, por lo tanto, es nullable
+            $table->text('consulta_texto');  // Solo se almacena la consulta
             $table->timestamp('fecha')->default(DB::raw('CURRENT_TIMESTAMP'));  // Asigna la fecha actual por defecto
             $table->timestamps();  // Incluye las columnas created_at y updated_at
         });

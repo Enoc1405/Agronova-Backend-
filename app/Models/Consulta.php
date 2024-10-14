@@ -11,15 +11,16 @@ class Consulta extends Model
 
     protected $table = 'consultas';
 
+    // Solo los campos que están presentes en la tabla, eliminando 'respuesta_texto'
     protected $fillable = [
-        'user_id', // Cambiado aquí
+        'user_id',  // Referencia a la clave foránea de usuarios
         'consulta_texto',
-        'respuesta_texto',
         'fecha',
     ];
 
+    // Relación con la tabla de usuarios
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'user_id'); // Cambiado aquí
+        return $this->belongsTo(User::class, 'user_id');  // Relación belongsTo con User
     }
 }
