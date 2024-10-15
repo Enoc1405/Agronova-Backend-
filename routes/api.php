@@ -34,6 +34,7 @@ Route::get('/planta/{slug}', [OpenFarmController::class, 'obtenerPlanta']);
 Route::apiResource('consultas', ConsultaController::class); // Rutas para consultas
 Route::apiResource('estadisticas', EstadisticaController::class); // Rutas para estadísticas
 Route::post('/conversations', [ChatbotController::class, 'sendMessage']);
+Route::get('/buscar/{slug}', [OpenFarmController::class, 'obtenerPlanta']);
 Route::get('/test', function () {
     return response()->json(['message' => 'API is working!']);
 });
