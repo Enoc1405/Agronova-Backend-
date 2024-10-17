@@ -6,41 +6,34 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-// Importar el trait HasRoles de Spatie
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles; // Agregar el trait HasRoles
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Los campos que pueden ser llenados masivamente
     protected $fillable = [
         'name',
+        'last_name', // Apellido del usuario
         'email',
         'password',
+        'address', // Dirección del usuario
+        'city',    // Ciudad del usuario
+        'country', // País del usuario
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    // Los campos que se ocultarán cuando el modelo se serialice
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    // Los atributos que deben ser convertidos a tipos nativos
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+  
 }

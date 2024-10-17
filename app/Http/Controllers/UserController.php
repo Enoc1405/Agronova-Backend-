@@ -29,8 +29,12 @@ class UserController extends Controller
             // Crear el nuevo usuario
             $user = User::create([
                 'name' => $request->name,
+                'last_name' => $request->last_name, // Apellido del usuario
                 'email' => $request->email,
                 'password' => bcrypt($request->password), // Hashear la contraseña
+                'address' => $request->address, // Dirección
+                'city' => $request->city, // Ciudad
+                'country' => $request->country, // País
             ]);
 
             return response()->json($user, 201);
@@ -43,8 +47,9 @@ class UserController extends Controller
     public function update(StoreUserRequest $request, $id)
     {
         $user = User::findOrFail($id);
-        // Actualizar el usuario
-        $user->update($request->only('name', 'email'));
+        
+        // Actualizar el usuario con los nuevos campos
+        $user->update($request->only('name', 'last_name', 'email', 'address', 'city', 'country'));
 
         return response()->json($user);
     }
@@ -101,5 +106,4 @@ class UserController extends Controller
             'roles' => $roles,
         ]);
     }
-
 }

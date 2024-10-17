@@ -7,6 +7,7 @@ use App\Http\Controllers\OpenFarmController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\AgroMonitoringController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +36,25 @@ Route::apiResource('consultas', ConsultaController::class); // Rutas para consul
 Route::apiResource('estadisticas', EstadisticaController::class); // Rutas para estadísticas
 Route::post('/conversations', [ChatbotController::class, 'sendMessage']);
 Route::get('/buscar/{slug}', [OpenFarmController::class, 'obtenerPlanta']);
+
+
+
+
+
+
+
+
+Route::get('/polygons', [AgroMonitoringController::class, 'getPolygons']);
+Route::get('/weather/current/{polygonId}', [AgroMonitoringController::class, 'getCurrentWeather']);
+Route::get('/weather/forecast/{latitude}/{longitude}', [AgroMonitoringController::class, 'getWeatherForecast']);
+Route::get('/weather/accumulated/{polygonId}', [AgroMonitoringController::class, 'getAccumulatedData']);
+Route::get('/soil/{polygonId}', [AgroMonitoringController::class, 'getSoilData']);
+Route::post('/polygons', [AgroMonitoringController::class, 'store']);
+Route::put('/polygons/{polygonId}', [AgroMonitoringController::class, 'update']);
+Route::delete('/polygons/{polygonId}', [AgroMonitoringController::class, 'destroy']);
+
+
+
 Route::get('/test', function () {
     return response()->json(['message' => 'API is working!']);
 });
