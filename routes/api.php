@@ -44,16 +44,15 @@ Route::get('/buscar/{slug}', [OpenFarmController::class, 'obtenerPlanta']);
 
 
 
-Route::get('/polygons', [AgroMonitoringController::class, 'getPolygons']);
-Route::get('/weather/current/{polygonId}', [AgroMonitoringController::class, 'getCurrentWeather']);
-Route::get('/weather/forecast/{latitude}/{longitude}', [AgroMonitoringController::class, 'getWeatherForecast']);
-Route::get('/weather/accumulated/{polygonId}', [AgroMonitoringController::class, 'getAccumulatedData']);
-Route::get('/soil/{polygonId}', [AgroMonitoringController::class, 'getSoilData']);
-Route::post('/polygons', [AgroMonitoringController::class, 'store']);
-Route::put('/polygons/{polygonId}', [AgroMonitoringController::class, 'update']);
-Route::delete('/polygons/{polygonId}', [AgroMonitoringController::class, 'destroy']);
-
-
+Route::post('/polygons', [AgromonitoringController::class, 'createPolygon']);
+Route::get('/polygons/{id}', [AgromonitoringController::class, 'getPolygon']);
+Route::put('/polygons/{id}', [AgromonitoringController::class, 'updatePolygon']);
+Route::delete('/polygons/{id}', [AgromonitoringController::class, 'deletePolygon']);
+Route::get('/polygons', [AgromonitoringController::class, 'listPolygons']);
+Route::get('/weather/current', [AgromonitoringController::class, 'getCurrentWeather']);
+Route::get('/weather/forecast', [AgromonitoringController::class, 'getWeatherForecast']);
+Route::get('/soil/{polygonId}', [AgromonitoringController::class, 'getSoilData']);
+Route::get('/uv', [AgromonitoringController::class, 'getUVIndex']);
 
 Route::get('/test', function () {
     return response()->json(['message' => 'API is working!']);

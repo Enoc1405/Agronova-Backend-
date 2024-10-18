@@ -43,16 +43,35 @@ class UserController extends Controller
         }
     }
 
-    // Actualizar un usuario existente
-    public function update(StoreUserRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        
-        // Actualizar el usuario con los nuevos campos
-        $user->update($request->only('name', 'last_name', 'email', 'address', 'city', 'country'));
-
-        return response()->json($user);
+        // Buscar al usuario por su ID
+        $user = User::find($id);
+    
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no encontrado'], 404);
+        }
+    
+        // Validar los campos (son opcionales, pero si se envían, deben cumplir con las reglas)
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'last_name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|max:255',
+            'address' => 'sometimes|string|max:255',
+            'city' => 'sometimes|string|max:255',
+            'country' => 'sometimes|string|max:255',
+        ]);
+    
+        // Rellenar solo los campos que fueron enviados en la solicitud
+        $user->fill($validated);
+    
+        // Guardar los cambios
+        $user->save();
+    
+        // Devolver una respuesta de éxito con el usuario actualizado
+        return response()->json(['message' => 'Usuario actualizado con éxito', 'user' => $user], 200);
     }
+    
 
     // Eliminar un usuario
     public function destroy($id)
