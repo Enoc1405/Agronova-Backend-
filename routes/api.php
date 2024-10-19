@@ -39,6 +39,7 @@ Route::get('/buscar/{slug}', [OpenFarmController::class, 'obtenerPlanta']);
 
 Route::apiResource('consultas', ConsultaController::class);
 Route::apiResource('estadisticas', EstadisticaController::class);
+Route::get('/consultas/estadisticas', [ConsultaController::class, 'estadisticas']);
 
 
 Route::post('/polygons', [AgromonitoringController::class, 'createPolygon']);
