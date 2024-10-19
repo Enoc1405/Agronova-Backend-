@@ -10,7 +10,7 @@ class EstadisticaController extends Controller
     // Mostrar todas las estadísticas
     public function index()
     {
-        $estadisticas = Estadisticas::all();
+        $estadisticas = Estadisticas::paginate(10); // Paginación para 10 estadísticas por página
         return response()->json($estadisticas);
     }
 
@@ -37,7 +37,7 @@ class EstadisticaController extends Controller
             'temas_mas_consultados',
             'satisfaccion_usuario'
         ]));
-        
+
         return response()->json($estadistica, 201);
     }
 
@@ -58,7 +58,7 @@ class EstadisticaController extends Controller
             'temas_mas_consultados',
             'satisfaccion_usuario'
         ]));
-        
+
         return response()->json($estadistica);
     }
 

@@ -3,34 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Consulta;
-use App\Models\Estadisticas;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ConsultaController extends Controller
 {
-    // Listar todas las consultas
+    // Mostrar todas las consultas
     public function index()
     {
-        try {
-            // Obtener todas las consultas
-            $consultas = Consulta::all();
-            return response()->json($consultas, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al obtener las consultas: ' . $e->getMessage()], 500);
-        }
+        $consultas = Consulta::paginate(10); // Paginación para 10 consultas por página
+        return response()->json($consultas);
     }
 
-    // Mostrar una consulta específica por ID
+    // Mostrar una consulta específica
     public function show($id)
     {
-        try {
-            // Buscar la consulta por ID
-            $consulta = Consulta::findOrFail($id);
-            return response()->json($consulta, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Consulta no encontrada: ' . $e->getMessage()], 404);
-        }
+        $consulta = Consulta::findOrFail($id);
+        return response()->json($consulta);
     }
 
     // Crear una nueva consulta
@@ -49,26 +37,7 @@ class ConsultaController extends Controller
             ]);
 
             // Crear la consulta
-            $consulta = Consulta::create($request->only([
-                'user_id', 'consulta_texto', 'fecha'  // Solo los campos relevantes
-            ]));
-
-            // Actualizar estadísticas
-            $userId = $request->input('user_id');
-            $estadistica = Estadisticas::firstOrCreate(
-                ['user_id' => $userId], // Si no existe, se crea una nueva fila
-                ['numero_consultas' => 0, 'temas_mas_consultados' => '']
-            );
-
-            // Incrementar el número de consultas
-            $estadistica->increment('numero_consultas');
-
-            // Actualizar los temas más consultados (esto depende de cómo manejas los temas)
-            $temaActual = $consulta->consulta_texto;
-            $temasAnteriores = $estadistica->temas_mas_consultados;
-            $estadistica->update([
-                'temas_mas_consultados' => $temasAnteriores ? $temasAnteriores . ', ' . $temaActual : $temaActual
-            ]);
+            $consulta = Consulta::create($request->only(['user_id', 'consulta_texto', 'fecha']));
 
             return response()->json($consulta, 201);
         } catch (\Exception $e) {
@@ -83,14 +52,20 @@ class ConsultaController extends Controller
             $consulta = Consulta::findOrFail($id);
 
             $request->validate([
+                'user_id' => 'required|exists:users,id',  // Valida que el usuario exista
                 'consulta_texto' => 'required|string',
                 'fecha' => 'nullable|date',
+            ], [
+                'user_id.required' => 'El campo usuario es obligatorio.',
+                'user_id.exists' => 'El usuario no existe en el sistema.',
+                'consulta_texto.required' => 'El texto de la consulta es obligatorio.',
+                'fecha.date' => 'La fecha debe tener un formato válido (YYYY-MM-DD).',
             ]);
 
-            // Actualizar la consulta con los nuevos datos
-            $consulta->update($request->only(['consulta_texto', 'fecha']));
+            // Actualizar la consulta
+            $consulta->update($request->only(['user_id', 'consulta_texto', 'fecha']));
 
-            return response()->json($consulta, 200);
+            return response()->json($consulta);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al actualizar la consulta: ' . $e->getMessage()], 500);
         }
@@ -102,8 +77,7 @@ class ConsultaController extends Controller
         try {
             $consulta = Consulta::findOrFail($id);
             $consulta->delete();
-
-            return response()->json(['message' => 'Consulta eliminada correctamente'], 200);
+            return response()->json(['message' => 'Consulta eliminada con éxito'], 204);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error al eliminar la consulta: ' . $e->getMessage()], 500);
         }

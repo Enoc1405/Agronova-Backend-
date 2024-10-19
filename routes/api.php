@@ -37,27 +37,8 @@ Route::get('/buscar/{slug}', [OpenFarmController::class, 'obtenerPlanta']);
 
 
 
-Route::prefix('consultas')->group(function () {
-    // Listar todas las consultas
-    Route::get('/', [ConsultaController::class, 'index'])->name('consultas.index');
-
-    // Mostrar una consulta específica por ID
-    Route::get('/{id}', [ConsultaController::class, 'show'])->name('consultas.show');
-
-    // Crear una nueva consulta
-    Route::post('/', [ConsultaController::class, 'store'])->name('consultas.store');
-
-    // Actualizar una consulta existente
-    Route::put('/{id}', [ConsultaController::class, 'update'])->name('consultas.update');
-
-    // Eliminar una consulta
-    Route::delete('/{id}', [ConsultaController::class, 'destroy'])->name('consultas.destroy');
-});
-
-
-
-
-
+Route::apiResource('consultas', ConsultaController::class);
+Route::apiResource('estadisticas', EstadisticaController::class);
 
 
 Route::post('/polygons', [AgromonitoringController::class, 'createPolygon']);
