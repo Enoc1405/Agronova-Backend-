@@ -52,4 +52,18 @@ class ConsultaController extends Controller
             return response()->json(['error' => 'Error al crear la consulta: ' . $e->getMessage()], 500);
         }
     }
+
+    public function index()
+{
+    try {
+        // Obtener todas las consultas
+        $consultas = Consulta::all();
+
+        // Devolver las consultas en formato JSON
+        return response()->json($consultas, 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error al obtener las consultas: ' . $e->getMessage()], 500);
+    }
+}
+
 }

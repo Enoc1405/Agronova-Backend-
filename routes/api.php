@@ -37,7 +37,9 @@ Route::get('/buscar/{slug}', [OpenFarmController::class, 'obtenerPlanta']);
 
 
 
-Route::apiResource('consultas', ConsultaController::class);
+
+Route::get('/consultas', [ConsultaController::class, 'index'])->name('consultas.index');
+Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
 Route::apiResource('estadisticas', EstadisticaController::class);
 Route::get('/consultas/estadisticas', [ConsultaController::class, 'estadisticas']);
 
