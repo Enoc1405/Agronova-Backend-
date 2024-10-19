@@ -32,11 +32,27 @@ Route::prefix('usuarios')->group(function () {
 
 Route::post('/usuarios/login', [UserController::class, 'login']);
 Route::get('/planta/{slug}', [OpenFarmController::class, 'obtenerPlanta']);
-Route::apiResource('consultas', ConsultaController::class); // Rutas para consultas
-Route::apiResource('estadisticas', EstadisticaController::class); // Rutas para estadísticas
 Route::post('/conversations', [ChatbotController::class, 'sendMessage']);
 Route::get('/buscar/{slug}', [OpenFarmController::class, 'obtenerPlanta']);
 
+
+
+Route::prefix('consultas')->group(function () {
+    // Listar todas las consultas
+    Route::get('/', [ConsultaController::class, 'index'])->name('consultas.index');
+
+    // Mostrar una consulta específica por ID
+    Route::get('/{id}', [ConsultaController::class, 'show'])->name('consultas.show');
+
+    // Crear una nueva consulta
+    Route::post('/', [ConsultaController::class, 'store'])->name('consultas.store');
+
+    // Actualizar una consulta existente
+    Route::put('/{id}', [ConsultaController::class, 'update'])->name('consultas.update');
+
+    // Eliminar una consulta
+    Route::delete('/{id}', [ConsultaController::class, 'destroy'])->name('consultas.destroy');
+});
 
 
 
