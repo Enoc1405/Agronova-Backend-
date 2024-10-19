@@ -154,4 +154,44 @@ class AgromonitoringController extends Controller
             return response()->json(['error' => 'Error al obtener el índice UV'], 500);
         }
     }
+
+
+    public function getSatelliteImages($polygonId, Request $request)
+    {
+        try {
+            // Verifica que el ID del polígono no esté vacío
+            if (empty($polygonId)) {
+                return response()->json(['error' => 'Se requiere el ID del polígono'], 400);
+            }
+    
+            // Verifica que se proporcionen las fechas
+            $startUnix = $request->input('start');
+            $endUnix = $request->input('end');
+    
+            if (empty($startUnix) || empty($endUnix)) {
+                return response()->json(['error' => 'Se requieren las fechas de inicio y fin'], 400);
+            }
+    
+            // Hacer la solicitud a la API para obtener imágenes satelitales
+            $response = Http::get($this->apiUrl . '/image/search', [
+                'start' => $startUnix,
+                'end' => $endUnix,
+                'polyid' => $polygonId,
+                'appid' => $this->appId,
+            ]);
+    
+            // Verifica si la respuesta fue exitosa
+            if ($response->successful()) {
+                return response()->json($response->json(), 200);
+            } else {
+                // Manejo de errores basado en el código de estado de la respuesta
+                return response()->json(['error' => 'Error en la API: ' . $response->body()], $response->status());
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener imágenes satelitales: ' . $e->getMessage()], 500);
+        }
+    }
+    
+    
+
 }

@@ -53,6 +53,7 @@ Route::get('/weather/current', [AgromonitoringController::class, 'getCurrentWeat
 Route::get('/weather/forecast', [AgromonitoringController::class, 'getWeatherForecast']);
 Route::get('/soil/{polygonId}', [AgromonitoringController::class, 'getSoilData']);
 Route::get('/uv', [AgromonitoringController::class, 'getUVIndex']);
+Route::get('/polygons/{polygonId}/satellite-images', [AgromonitoringController::class, 'getSatelliteImages']);
 
 Route::get('/test', function () {
     return response()->json(['message' => 'API is working!']);
