@@ -7,7 +7,7 @@ use App\Http\Controllers\OpenFarmController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\ChatbotController;
-use App\Http\Controllers\AgroMonitoringController;
+use App\Http\Controllers\AgromonitoringController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
